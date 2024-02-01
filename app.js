@@ -2,6 +2,8 @@ const express = require('express')
 const { engine } = require('express-handlebars')
 const app = express()
 const port = 3000
+const db = require('./models')
+const Track = db.Track
 
 app.engine('.hbs', engine({ extname: '.hbs' }))
 app.set('view engine', '.hbs')
@@ -14,7 +16,9 @@ app.get('/', (req, res) => {
 })
 
 app.get('/track', (req, res) => {
-  res.render('index')
+  // res.render('index')
+  return Track.findAll()
+    .then((tracks) => res.send({tracks}))
 })
 
 app.get('/track/new', (req, res) => {
