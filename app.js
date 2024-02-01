@@ -12,39 +12,47 @@ app.use(express.static('public'))
 app.use(express.urlencoded({ extended : true }))
 
 app.get('/', (req, res) => {
-  res.redirect('/track')
+  res.redirect('/tracks')
 })
 
-app.get('/track', (req, res) => {
+app.get('/tracks', (req, res) => {
   // res.render('index')
-  return Track.findAll()
-    .then((tracks) => res.send({tracks}))
+  return Track.findAll({
+    attributes: ['id', 'name', 'date', 'category', 'amount'], 
+    raw: true
+  })
+    .then((tracks) => {
+      const amount = tracks[0].amount
+      res.render('tracks', { amount })
+      // console.log(tracks)
+      // console.log(tracks[0].amount)
+    })
 })
 
-app.get('/track/new', (req, res) => {
+app.get('/tracks/new', (req, res) => {
   res.render('new')
 })
 
-app.post('/track/new', (req, res) => {
+app.post('/tracks/new', (req, res) => {
   const info = req.body
   const name = info.name
   console.log(info)
-  res.redirect('/track')
+  res.redirect('/tracks')
 })
 
-app.get('/track/edit', (req, res) => {
+app.get('/tracks/edit', (req, res) => {
   // 待新增id路由
   res.render('edit')
 })
 
-app.post('/track/edit', (req, res) => {
+app.post('/tracks/edit', (req, res) => {
   // 待新增id路由
   const info = req.body
   console.log(info)
-  res.redirect('/track')
+  res.redirect('/tracks')
 })
 
-app.get('/track/delete', (req,res) => {
+app.get('/tracks/delete', (req,res) => {
   res.send('It has been deleted')
 })
 
