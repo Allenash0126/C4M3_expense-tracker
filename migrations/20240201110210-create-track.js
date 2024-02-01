@@ -10,7 +10,20 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       name: {
+        allowNull: false,
         type: Sequelize.STRING
+      },
+      date: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
+      category: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
+      amount: {
+        allowNull: false,
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,
