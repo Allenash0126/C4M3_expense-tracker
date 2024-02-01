@@ -1,1 +1,27 @@
-<h2 class="text-primary">This is Berry!</h2>
+<div class="container">
+  <div>
+    <select name="category" id="category">
+      <option>類別</option>
+      <option>家居物業</option>
+      <option>交通出行</option>
+      <option>休閒娛樂</option>
+      <option>餐飲食品</option>
+      <option>其他</option>
+    </select>
+  </div>
+
+  <div>
+    <h6>總金額</h6>    
+    <h3>{{amount}}</h3>
+  </div>
+
+  <div>
+    <a href="/track/edit">修改</a> 
+    <a href="/track/delete">刪除</a>
+  </div>
+
+  <form action="/track/new">
+    <button type="submit">新增支出</button>
+  </form>
+
+</div>

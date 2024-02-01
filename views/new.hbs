@@ -1,0 +1,28 @@
+<div class="container">
+  <h4>請輸入你的支出</h4>
+
+  <form action="/track/new" method="post">
+    
+    <label style="display: flex;">名稱</label>
+    <input type="text" name="name" id="name">
+  
+    <label style="display: flex;">日期</label>
+    <input type="date" name="date" id="date">
+  
+    <label style="display: flex;">類別</label>
+    <select name="category" id="category">
+      <option>類別</option>
+      <option>家居物業</option>
+      <option>交通出行</option>
+      <option>休閒娛樂</option>
+      <option>餐飲食品</option>
+      <option>其他</option>
+    </select>
+
+    <label style="display: flex;">金額</label>
+    <input type="number"  name="amount" id="amount">
+
+    <button style="display: flex;" type="submit">新增支出</button>
+    
+  </form>
+</div>
