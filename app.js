@@ -36,8 +36,13 @@ app.get('/tracks/new', (req, res) => {
 app.post('/tracks/new', (req, res) => {
   const info = req.body
   const name = info.name
+  const date = info.date
+  const category = info.category
+  const amount = info.amount
   console.log(info)
-  res.redirect('/tracks')
+  return Track.create({ name, date, category, amount })
+    .then(res.redirect('/tracks'))
+    .catch((err) => console.log(err))
 })
 
 app.get('/tracks/edit', (req, res) => {
