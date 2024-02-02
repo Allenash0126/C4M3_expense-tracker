@@ -16,8 +16,18 @@
   </div>
 
   <div>
-    <a href="/tracks/edit">修改</a> 
-    <a href="/tracks/delete">刪除</a>
+    <ul>
+      {{#each tracks}} 
+        <li>
+          {{this.category}}: 
+          {{this.name}}: 
+          {{this.amount}}:
+          {{this.date}}:
+          <a href="/tracks/edit/{{this.id}}">修改</a>
+          <a href="/tracks/delete/{{this.id}}">刪除</a>
+        </li>
+      {{/each}}
+    </ul>
   </div>
 
   <form action="/tracks/new">

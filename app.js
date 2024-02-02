@@ -9,23 +9,20 @@ app.engine('.hbs', engine({ extname: '.hbs' }))
 app.set('view engine', '.hbs')
 app.set('views', './views')
 app.use(express.static('public'))
-app.use(express.urlencoded({ extended : true }))
+app.use(express.urlencoded({ extended: true }))
 
 app.get('/', (req, res) => {
   res.redirect('/tracks')
 })
 
 app.get('/tracks', (req, res) => {
-  // res.render('index')
   return Track.findAll({
-    attributes: ['id', 'name', 'date', 'category', 'amount'], 
+    attributes: ['id', 'name', 'date', 'category', 'amount'],
     raw: true
   })
     .then((tracks) => {
       const amount = tracks[0].amount
-      res.render('tracks', { amount })
-      // console.log(tracks)
-      // console.log(tracks[0].amount)
+      res.render('tracks', { tracks, amount })
     })
 })
 
@@ -45,19 +42,33 @@ app.post('/tracks/new', (req, res) => {
     .catch((err) => console.log(err))
 })
 
-app.get('/tracks/edit', (req, res) => {
-  // 待新增id路由
-  res.render('edit')
+app.get('/tracks/edit/:id', (req, res) => {
+  const id = req.params.id
+  return Track.findByPk(id, {
+    attributes: ['id', 'name', 'date', 'category', 'amount'],
+    raw: true
+  })
+    .then((track) => {
+      res.render('edit', { track })
+    })
 })
 
-app.post('/tracks/edit', (req, res) => {
-  // 待新增id路由
+app.post('/tracks/edit/:id', (req, res) => {
   const info = req.body
-  console.log(info)
-  res.redirect('/tracks')
+  const id = req.params.id
+  return Track.update({
+    name: info.name,
+    date: info.date,
+    category: info.category,
+    amount: info.amount
+  }, {
+    where: { id }
+  })
+    .then(() => res.redirect('/tracks'))
+    .catch((err) => console.log(err))
 })
 
-app.get('/tracks/delete', (req,res) => {
+app.get('/tracks/delete', (req, res) => {
   res.send('It has been deleted')
 })
 
