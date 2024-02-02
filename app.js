@@ -23,8 +23,11 @@ app.get('/tracks', (req, res) => {
     raw: true
   })
     .then((tracks) => {
-      const amount = tracks[0].amount
-      res.render('tracks', { tracks, amount })
+      let totalAmount = 0
+      for (i = 0; i < tracks.length; i++) {
+        totalAmount += tracks[i].amount
+      }
+      res.render('tracks', { tracks, totalAmount })
     })
 })
 
@@ -72,8 +75,8 @@ app.put('/tracks/:id', (req, res) => {
 
 app.delete('/tracks/:id', (req, res) => {
   const id = req.params.id
-  
-  return Track.destroy({ where: { id }} )
+
+  return Track.destroy({ where: { id } })
     .then(() => res.redirect('/tracks'))
     .catch((err) => console.log(err))
 })

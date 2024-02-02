@@ -12,7 +12,7 @@
 
   <div>
     <h6>總金額</h6>    
-    <h3>{{ amount }}</h3>
+    <h3>{{ totalAmount }}</h3>
   </div>
 
   <div>
@@ -28,7 +28,7 @@
           <form action="/tracks/{{this.id}}?_method=DELETE" method="post" style="display: inline;">
             <button type="submit">刪除</button>
           </form>
-          
+
         </li>
       {{/each}}
     </ul>
