@@ -1,7 +1,7 @@
 <div class="container">
   <h4>請修改你的支出</h4>
 
-  <form action="/tracks/edit/{{track.id}}" method="post">
+  <form action="/tracks/{{track.id}}?_method=PUT" method="post">
     <label style="display: flex;">名稱</label>
     <input type="text" name="name" id="name" value="{{track.name}}">
     

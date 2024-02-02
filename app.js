@@ -1,5 +1,6 @@
 const express = require('express')
 const { engine } = require('express-handlebars')
+const methodOverride = require('method-override')
 const app = express()
 const port = 3000
 const db = require('./models')
@@ -10,6 +11,7 @@ app.set('view engine', '.hbs')
 app.set('views', './views')
 app.use(express.static('public'))
 app.use(express.urlencoded({ extended: true }))
+app.use(methodOverride('_method'))
 
 app.get('/', (req, res) => {
   res.redirect('/tracks')
@@ -38,7 +40,7 @@ app.post('/tracks/new', (req, res) => {
   const amount = info.amount
   console.log(info)
   return Track.create({ name, date, category, amount })
-    .then(res.redirect('/tracks'))
+    .then(() => res.redirect('/tracks'))
     .catch((err) => console.log(err))
 })
 
@@ -53,7 +55,7 @@ app.get('/tracks/edit/:id', (req, res) => {
     })
 })
 
-app.post('/tracks/edit/:id', (req, res) => {
+app.put('/tracks/:id', (req, res) => {
   const info = req.body
   const id = req.params.id
   return Track.update({
@@ -68,8 +70,12 @@ app.post('/tracks/edit/:id', (req, res) => {
     .catch((err) => console.log(err))
 })
 
-app.get('/tracks/delete', (req, res) => {
-  res.send('It has been deleted')
+app.delete('/tracks/:id', (req, res) => {
+  const id = req.params.id
+  
+  return Track.destroy({ where: { id }} )
+    .then(() => res.redirect('/tracks'))
+    .catch((err) => console.log(err))
 })
 
 app.get('/logout', (req, res) => {
