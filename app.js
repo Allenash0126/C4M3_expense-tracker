@@ -1,4 +1,6 @@
 const express = require('express')
+const flash = require('connect-flash')
+const session = require('express-session')
 const { engine } = require('express-handlebars')
 const methodOverride = require('method-override')
 const app = express()
@@ -12,6 +14,12 @@ app.set('views', './views')
 app.use(express.static('public'))
 app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
+app.use(session({
+	secret: 'ThisIsSecret',
+	resave: false,
+	saveUninitialized: false
+}))
+app.use(flash())
 
 app.get('/', (req, res) => {
   res.redirect('/tracks')
@@ -27,7 +35,7 @@ app.get('/tracks', (req, res) => {
       for (i = 0; i < tracks.length; i++) {
         totalAmount += tracks[i].amount
       }
-      res.render('tracks', { tracks, totalAmount })
+      res.render('tracks', { tracks, totalAmount, message: req.flash('success') })
     })
 })
 
@@ -36,14 +44,12 @@ app.get('/tracks/new', (req, res) => {
 })
 
 app.post('/tracks/new', (req, res) => {
-  const info = req.body
-  const name = info.name
-  const date = info.date
-  const category = info.category
-  const amount = info.amount
-  console.log(info)
+const { name, date, category,amount } = req.body
   return Track.create({ name, date, category, amount })
-    .then(() => res.redirect('/tracks'))
+    .then(() => {
+      req.flash('success','新增成功！')
+      res.redirect('/tracks')
+    })
     .catch((err) => console.log(err))
 })
 
@@ -59,17 +65,16 @@ app.get('/tracks/edit/:id', (req, res) => {
 })
 
 app.put('/tracks/:id', (req, res) => {
-  const info = req.body
   const id = req.params.id
-  return Track.update({
-    name: info.name,
-    date: info.date,
-    category: info.category,
-    amount: info.amount
+  const { name, date, category,amount } = req.body
+  return Track.update({ name, date, category, amount
   }, {
     where: { id }
   })
-    .then(() => res.redirect('/tracks'))
+    .then(() => {
+      req.flash('success','更新成功！')
+      res.redirect('/tracks')
+    })
     .catch((err) => console.log(err))
 })
 
@@ -77,7 +82,10 @@ app.delete('/tracks/:id', (req, res) => {
   const id = req.params.id
 
   return Track.destroy({ where: { id } })
-    .then(() => res.redirect('/tracks'))
+    .then(() => {
+      req.flash('success','刪除成功！')
+      res.redirect('/tracks')
+  })
     .catch((err) => console.log(err))
 })
 
