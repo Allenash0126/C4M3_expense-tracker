@@ -18,27 +18,22 @@ router.get('/', (req, res) => {
 })
 
 router.get('/new', (req, res) => {
-  res.render('new', { error: req.flash('error') })
+  res.render('new')
 })
 
-router.post('/new', (req, res) => {
-  try {
-    const { name, date, category,amount } = req.body
-    return Track.create({ name, date, category, amount })
-      .then(() => {
-        req.flash('success','新增成功！')
-        res.redirect('/tracks')
-      })
-      .catch((error) => {
-        console.error(error)
-        req.flash('error', '新增失敗:(')
-        return res.redirect('back')
-      })
-  } catch (error) {
-      console.error(error)
-      req.flash('error', '新增失敗:(')
-      return res.redirect('back')
-  }
+router.post('/new', (req, res, next) => {
+  
+  const { name, date, category,amount } = req.body
+  return Track.create({ name, date, category, amount })
+    .then(() => {
+      req.flash('success','新增成功！')
+      res.redirect('/tracks')
+    })
+    .catch((error) => {
+      error.errorMessage = '新增失敗:('
+      next(error)
+    })
+  
 })
 
 router.get('/edit/:id', (req, res) => {
@@ -52,7 +47,7 @@ router.get('/edit/:id', (req, res) => {
     })
 })
 
-router.put('/:id', (req, res) => {
+router.put('/:id', (req, res, next) => {
   const id = req.params.id
   const { name, date, category,amount } = req.body
   return Track.update({ name, date, category, amount
@@ -63,7 +58,10 @@ router.put('/:id', (req, res) => {
       req.flash('success','更新成功！')
       res.redirect('/tracks')
     })
-    .catch((err) => console.log(err))
+    .catch((error) => {
+      error.errorMessage = '更新失敗:('
+      next(error)
+    })
 })
 
 router.delete('/:id', (req, res) => {

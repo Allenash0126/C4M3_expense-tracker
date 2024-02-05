@@ -4,7 +4,8 @@ const session = require('express-session')
 const { engine } = require('express-handlebars')
 const methodOverride = require('method-override')
 const app = express()
-const messageHadler = require('./middlewares/message-hadler')
+const messageHandler = require('./middlewares/message-handler')
+const errorHandler = require('./middlewares/error-handler')
 const router = require('./routes')
 const port = 3000
 const db = require('./models')
@@ -22,8 +23,9 @@ app.use(session({
 	saveUninitialized: false
 }))
 app.use(flash())
-app.use(messageHadler)
+app.use(messageHandler)
 app.use(router)
+app.use(errorHandler)
 
 app.get('/', (req, res) => {
   res.redirect('/tracks')
