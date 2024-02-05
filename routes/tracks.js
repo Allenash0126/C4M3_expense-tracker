@@ -18,17 +18,27 @@ router.get('/', (req, res) => {
 })
 
 router.get('/new', (req, res) => {
-  res.render('new')
+  res.render('new', { error: req.flash('error') })
 })
 
 router.post('/new', (req, res) => {
-const { name, date, category,amount } = req.body
-  return Track.create({ name, date, category, amount })
-    .then(() => {
-      req.flash('success','新增成功！')
-      res.redirect('/tracks')
-    })
-    .catch((err) => console.log(err))
+  try {
+    const { name, date, category,amount } = req.body
+    return Track.create({ name, date, category, amount })
+      .then(() => {
+        req.flash('success','新增成功！')
+        res.redirect('/tracks')
+      })
+      .catch((error) => {
+        console.error(error)
+        req.flash('error', '新增失敗:(')
+        return res.redirect('back')
+      })
+  } catch (error) {
+      console.error(error)
+      req.flash('error', '新增失敗:(')
+      return res.redirect('back')
+  }
 })
 
 router.get('/edit/:id', (req, res) => {
