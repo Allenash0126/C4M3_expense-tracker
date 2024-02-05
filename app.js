@@ -4,6 +4,7 @@ const session = require('express-session')
 const { engine } = require('express-handlebars')
 const methodOverride = require('method-override')
 const app = express()
+const messageHadler = require('./middlewares/message-hadler')
 const port = 3000
 const db = require('./models')
 const Track = db.Track
@@ -20,6 +21,7 @@ app.use(session({
 	saveUninitialized: false
 }))
 app.use(flash())
+app.use(messageHadler)
 
 app.get('/', (req, res) => {
   res.redirect('/tracks')
@@ -35,7 +37,7 @@ app.get('/tracks', (req, res) => {
       for (i = 0; i < tracks.length; i++) {
         totalAmount += tracks[i].amount
       }
-      res.render('tracks', { tracks, totalAmount, message: req.flash('success') })
+      res.render('tracks', { tracks, totalAmount })
     })
 })
 
