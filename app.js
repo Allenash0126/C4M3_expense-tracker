@@ -4,6 +4,11 @@ const session = require('express-session')
 const { engine } = require('express-handlebars')
 const methodOverride = require('method-override')
 const app = express()
+
+if (process.env.NODE_ENV === 'development') {
+  require('dotenv').config()
+}
+
 const messageHandler = require('./middlewares/message-handler')
 const errorHandler = require('./middlewares/error-handler')
 const router = require('./routes')
@@ -18,7 +23,7 @@ app.use(express.static('public'))
 app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
 app.use(session({
-	secret: 'ThisIsSecret',
+	secret: process.env.SESSION_SECRET,
 	resave: false,
 	saveUninitialized: false
 }))
