@@ -29,9 +29,14 @@ passport.serializeUser((user, done) => {
   done(null, { id, name, email })
 })
 
+passport.deserializeUser((user, done) => {
+  done(null, { id: user.id })
+})
+
 const tracks = require('./tracks')
 const users = require('./users')
-router.use('/tracks', tracks)
+const authHandler = require('../middlewares/auth-handler')
+router.use('/tracks', authHandler, tracks)
 // 除了引用tracks.js，也將重複的路由/tracks內建，可移除tracks.js內的/tracks路由
 router.use('/users', users)
 
@@ -54,7 +59,12 @@ router.post('/login', passport.authenticate('local', {
 }))
 
 router.get('/logout', (req, res) => {
-  res.send('Logout bye~')
+  req.logout((error) => {
+    if (error) {
+      next(error)
+    }
+    return res.redirect('login')
+  })
 })
 
 module.exports = router
