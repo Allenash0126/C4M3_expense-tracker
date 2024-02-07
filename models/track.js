@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate (models) {
       Track.belongsTo(models.User)
+      Track.belongsTo(models.Category)
     }
   }
   Track.init({
@@ -27,6 +28,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    categoryId: {
       type: DataTypes.INTEGER,
       allowNull: false
     }

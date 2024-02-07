@@ -1,7 +1,7 @@
-'use strict';
+'use strict'
 const {
   Model
-} = require('sequelize');
+} = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
   class Category extends Model {
     /**
@@ -9,21 +9,21 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {
-      // define association here
+    static associate (models) {
+      Category.hasMany(models.Track)
     }
   }
   Category.init({
     name: {
       type: DataTypes.STRING,
       allowNull: false
-    }, 
+    },
     icon: {
       type: DataTypes.STRING
     }
   }, {
     sequelize,
-    modelName: 'Category',
-  });
-  return Category;
-};
+    modelName: 'Category'
+  })
+  return Category
+}

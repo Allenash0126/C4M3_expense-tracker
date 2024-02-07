@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -8,7 +8,7 @@ module.exports = {
 
   async down (queryInterface, Sequelize) {
     queryInterface.addColumn('Tracks', 'category', {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING
     })
   }
-};
+}
