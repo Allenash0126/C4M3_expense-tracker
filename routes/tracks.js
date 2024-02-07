@@ -7,7 +7,7 @@ router.get('/', (req, res) => {
   const userId = req.user.id
   return Track.findAll({
     attributes: ['id', 'name', 'date', 'category', 'amount', 'userId'],
-    where:{ userId },
+    where: { userId },
     raw: true
   })
     .then((tracks) => {
@@ -82,9 +82,9 @@ router.put('/:id', (req, res, next) => {
       }
       return Track.update({ name, date, category, amount }, { where: { id } })
         .then(() => {
-        req.flash('success', '更新成功！')
-        return res.redirect('/tracks')
-      })
+          req.flash('success', '更新成功！')
+          return res.redirect('/tracks')
+        })
     })
     .catch((error) => {
       error.errorMessage = '更新失敗'
@@ -111,9 +111,9 @@ router.delete('/:id', (req, res) => {
       }
       return Track.destroy({ where: { id } })
         .then(() => {
-        req.flash('success', '刪除成功！')
-        return res.redirect('/tracks')
-      })
+          req.flash('success', '刪除成功！')
+          return res.redirect('/tracks')
+        })
     })
     .catch((error) => {
       error.errorMessage = '刪除失敗'

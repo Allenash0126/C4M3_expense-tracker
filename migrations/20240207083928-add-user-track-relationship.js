@@ -1,10 +1,10 @@
-'use strict';
+'use strict'
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
     queryInterface.addColumn('Tracks', 'userId', {
-      type: Sequelize.INTEGER, 
+      type: Sequelize.INTEGER,
       references: {
         model: 'Users',
         key: 'id'
@@ -17,4 +17,4 @@ module.exports = {
   async down (queryInterface, Sequelize) {
     queryInterface.removeColumn('Tracks', 'userId')
   }
-};
+}
