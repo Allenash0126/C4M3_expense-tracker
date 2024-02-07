@@ -32,14 +32,6 @@ app.use(messageHandler)
 app.use(router)
 app.use(errorHandler)
 
-app.get('/', (req, res) => {
-  res.redirect('/tracks')
-})
-
-app.get('/logout', (req, res) => {
-  res.send('Logout bye~')
-})
-
 app.listen(port, () => {
   console.log(`It is running on server http://localhost:${port}`)
 })
