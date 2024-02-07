@@ -1,19 +1,20 @@
+{{>message}}
 <div>
-  <h4>Register</h4>
-  <form action="/register" method="post">
-      <label for="" style="display: flex;">name</label>
+  <h4>註冊</h4>
+  <form action="/users" method="post">
+      <label for="" style="display: flex;">姓名</label>
       <input type="text" name="name" id="name" required>
 
-      <label for="" style="display: flex;">email</label>
+      <label for="" style="display: flex;">電子信箱</label>
       <input type="email" name="email" id="email" required>
-      <label for=""style="display: flex;">password</label>
+      <label for=""style="display: flex;">密碼</label>
       <input type="password" name="password" id="password" required>
-      <label for=""style="display: flex;">confirm Password</label>
+      <label for=""style="display: flex;">驗證密碼</label>
       <input type="password" name="confirmPassword" id="confirmPassword" required>
 
-      <button type="submit" style="display: flex;">Register</button>
+      <button type="submit" style="display: flex;">註冊</button>
   </form>
 
-  <span>Already have an account?</span>
-  <a href="/login">Login</a>
+  <span>已有帳號?</span>
+  <a href="/login">登入</a>
 </div>
