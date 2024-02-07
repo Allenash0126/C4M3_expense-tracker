@@ -22,10 +22,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       allowNull: false
     },
-    category: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
     amount: {
       type: DataTypes.INTEGER,
       allowNull: false

@@ -6,7 +6,7 @@ const Track = db.Track
 router.get('/', (req, res) => {
   const userId = req.user.id
   return Track.findAll({
-    attributes: ['id', 'name', 'date', 'category', 'amount', 'userId'],
+    attributes: ['id', 'name', 'date', 'amount', 'userId'],
     where: { userId },
     raw: true
   })
@@ -24,9 +24,9 @@ router.get('/new', (req, res) => {
 })
 
 router.post('/new', (req, res, next) => {
-  const { name, date, category, amount } = req.body
+  const { name, date, amount } = req.body
   const userId = req.user.id
-  return Track.create({ name, date, category, amount, userId })
+  return Track.create({ name, date, amount, userId })
     .then(() => {
       req.flash('success', '新增成功！')
       res.redirect('/tracks')
@@ -42,7 +42,7 @@ router.get('/edit/:id', (req, res, next) => {
   const userId = req.user.id
 
   return Track.findByPk(id, {
-    attributes: ['id', 'name', 'date', 'category', 'amount', 'userId'],
+    attributes: ['id', 'name', 'date', 'amount', 'userId'],
     raw: true
   })
     .then((track) => {
@@ -64,11 +64,11 @@ router.get('/edit/:id', (req, res, next) => {
 
 router.put('/:id', (req, res, next) => {
   const id = req.params.id
-  const { name, date, category, amount } = req.body
+  const { name, date, amount } = req.body
   const userId = req.user.id
 
   return Track.findByPk(id, {
-    attributes: ['id', 'name', 'date', 'category', 'amount', 'userId'],
+    attributes: ['id', 'name', 'date', 'amount', 'userId'],
     raw: true
   })
     .then((track) => {
@@ -80,7 +80,7 @@ router.put('/:id', (req, res, next) => {
         req.flash('fail', '權限不足')
         return res.redirect('/tracks')
       }
-      return Track.update({ name, date, category, amount }, { where: { id } })
+      return Track.update({ name, date, amount }, { where: { id } })
         .then(() => {
           req.flash('success', '更新成功！')
           return res.redirect('/tracks')
@@ -97,7 +97,7 @@ router.delete('/:id', (req, res) => {
   const userId = req.user.id
 
   return Track.findByPk(id, {
-    attributes: ['id', 'name', 'date', 'category', 'amount', 'userId'],
+    attributes: ['id', 'name', 'date', 'amount', 'userId'],
     raw: true
   })
     .then((track) => {
