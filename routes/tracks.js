@@ -22,18 +22,16 @@ router.get('/new', (req, res) => {
 })
 
 router.post('/new', (req, res, next) => {
-  
-  const { name, date, category,amount } = req.body
+  const { name, date, category, amount } = req.body
   return Track.create({ name, date, category, amount })
     .then(() => {
-      req.flash('success','新增成功！')
+      req.flash('success', '新增成功！')
       res.redirect('/tracks')
     })
     .catch((error) => {
       error.errorMessage = '新增失敗:('
       next(error)
     })
-  
 })
 
 router.get('/edit/:id', (req, res) => {
@@ -49,13 +47,12 @@ router.get('/edit/:id', (req, res) => {
 
 router.put('/:id', (req, res, next) => {
   const id = req.params.id
-  const { name, date, category,amount } = req.body
-  return Track.update({ name, date, category, amount
-  }, {
+  const { name, date, category, amount } = req.body
+  return Track.update({ name, date, category, amount }, {
     where: { id }
   })
     .then(() => {
-      req.flash('success','更新成功！')
+      req.flash('success', '更新成功！')
       res.redirect('/tracks')
     })
     .catch((error) => {
@@ -69,9 +66,9 @@ router.delete('/:id', (req, res) => {
 
   return Track.destroy({ where: { id } })
     .then(() => {
-      req.flash('success','刪除成功！')
+      req.flash('success', '刪除成功！')
       res.redirect('/tracks')
-  })
+    })
     .catch((err) => console.log(err))
 })
 

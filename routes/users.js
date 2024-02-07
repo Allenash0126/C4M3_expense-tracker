@@ -11,14 +11,13 @@ router.post('/', (req, res, next) => {
     res.redirect('/register')
   }
 
-  
   return User.findAll({
     attributes: ['name', 'email', 'password'],
     raw: true
   })
     .then((users) => {
       const isEmailExist = users.find((user) => email === user.email)
-      if(isEmailExist) {
+      if (isEmailExist) {
         req.flash('fail', '已有帳戶，請直接登入:)')
         return res.redirect('/login')
       }
@@ -29,9 +28,9 @@ router.post('/', (req, res, next) => {
         })
         .catch((error) => {
           error.errorMessage = '註冊失敗:('
-          next(error)          
+          next(error)
         })
-    })  
+    })
 })
 
 module.exports = router

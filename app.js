@@ -9,6 +9,7 @@ if (process.env.NODE_ENV === 'development') {
   require('dotenv').config()
 }
 
+const passport = require('passport')
 const messageHandler = require('./middlewares/message-handler')
 const errorHandler = require('./middlewares/error-handler')
 const router = require('./routes')
@@ -23,11 +24,12 @@ app.use(express.static('public'))
 app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
 app.use(session({
-	secret: process.env.SESSION_SECRET,
-	resave: false,
-	saveUninitialized: false
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false
 }))
 app.use(flash())
+app.use(passport.initialize())
 app.use(messageHandler)
 app.use(router)
 app.use(errorHandler)
