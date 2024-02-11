@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const db = require('../models')
 const Track = db.Track
+const Category = db.Category
 
 router.get('/', (req, res) => {
   const userId = req.user.id
@@ -26,15 +27,24 @@ router.get('/new', (req, res) => {
 router.post('/new', (req, res, next) => {
   const { name, date, amount } = req.body
   const userId = req.user.id
-  return Track.create({ name, date, amount, userId })
-    .then(() => {
-      req.flash('success', '新增成功！')
-      res.redirect('/tracks')
-    })
-    .catch((error) => {
-      error.errorMessage = '新增失敗:('
-      next(error)
-    })
+
+  return Category.findOne({
+    attributes: ['id', 'name', 'icon'],
+    where: { name: req.body.category },
+    raw: true
+  })
+  .then((category) => {
+    const categoryId = category.id
+    return Track.create({ name, date, amount, userId, categoryId })
+  })
+  .then(() => {
+    req.flash('success', '新增成功！')
+    res.redirect('/tracks')
+  })
+  .catch((error) => {
+    error.errorMessage = '新增失敗:('
+    next(error)
+  })
 })
 
 router.get('/edit/:id', (req, res, next) => {
