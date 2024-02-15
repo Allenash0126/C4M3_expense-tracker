@@ -32,35 +32,35 @@ module.exports = {
         {
           id: 1,
           name: '家居物業',
-          icon: 'https://fontawesome.com/icons/home?style=solid',
+          icon: '<i class="fa-solid fa-house"></i>',
           createdAt: new Date(),
           updatedAt: new Date()
         },
         {
           id: 2,
           name: '交通出行',
-          icon: 'https://fontawesome.com/icons/shuttle-van?style=solid',
+          icon: '<i class="fa-solid fa-van-shuttle"></i>',
           createdAt: new Date(),
           updatedAt: new Date()
         },
         {
           id: 3,
           name: '休閒娛樂',
-          icon: 'https://fontawesome.com/icons/grin-beam?style=solid',
+          icon: '<i class="fa-solid fa-face-grin-beam"></i>',
           createdAt: new Date(),
           updatedAt: new Date()
         },
         {
           id: 4,
           name: '餐飲食品',
-          icon: 'https://fontawesome.com/icons/utensils?style=solid',
+          icon: '<i class="fa-solid fa-utensils"></i>',
           createdAt: new Date(),
           updatedAt: new Date()
         },
         {
           id: 5,
           name: '其他',
-          icon: 'https://fontawesome.com/icons/pen?style=solid',
+          icon: '<i class="fa-solid fa-pen"></i>',
           createdAt: new Date(),
           updatedAt: new Date()
         }

@@ -4,19 +4,42 @@ const db = require('../models')
 const Track = db.Track
 const Category = db.Category
 
-router.get('/', (req, res) => {
+router.get('/', (req, res, next) => {
   const userId = req.user.id
+
   return Track.findAll({
-    attributes: ['id', 'name', 'date', 'amount', 'userId'],
+    attributes: ['id', 'name', 'date', 'amount', 'userId', 'categoryId'],
     where: { userId },
     raw: true
   })
     .then((tracks) => {
+      const promises = tracks.map((track) => {
+        const categoryId = track.categoryId
+        return Category.findOne({
+          attributes: ['id', 'name', 'icon'],
+          where: { id: categoryId },
+          raw: true
+        })
+          .then((category) => {
+            track.categoryIcon = category.icon
+            return track
+          })
+      })
+      // 用Promise.all解決非同步的錯誤：確保取得所有data，避免Category.findOne還沒完成，就下一步
+      return Promise.all(promises)
+    })
+
+    .then((tracks) => {
+      // 計算總共花費totalAmount
       let totalAmount = 0
       for (i = 0; i < tracks.length; i++) {
         totalAmount += tracks[i].amount
       }
       res.render('tracks', { tracks, totalAmount })
+    })
+    .catch((error) => {
+      error.errorMessage = '找不到資料'
+      next(error)
     })
 })
 
@@ -33,18 +56,18 @@ router.post('/new', (req, res, next) => {
     where: { name: req.body.category },
     raw: true
   })
-  .then((category) => {
-    const categoryId = category.id
-    return Track.create({ name, date, amount, userId, categoryId })
-  })
-  .then(() => {
-    req.flash('success', '新增成功！')
-    res.redirect('/tracks')
-  })
-  .catch((error) => {
-    error.errorMessage = '新增失敗:('
-    next(error)
-  })
+    .then((category) => {
+      const categoryId = category.id
+      return Track.create({ name, date, amount, userId, categoryId })
+    })
+    .then(() => {
+      req.flash('success', '新增成功！')
+      res.redirect('/tracks')
+    })
+    .catch((error) => {
+      error.errorMessage = '新增失敗:('
+      next(error)
+    })
 })
 
 router.get('/edit/:id', (req, res, next) => {
