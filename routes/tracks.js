@@ -75,9 +75,23 @@ router.get('/edit/:id', (req, res, next) => {
   const userId = req.user.id
 
   return Track.findByPk(id, {
-    attributes: ['id', 'name', 'date', 'amount', 'userId'],
+    attributes: ['id', 'name', 'date', 'amount', 'userId', 'categoryId'],
     raw: true
   })
+  // 在edit.hbs 引入既有的category Data分類
+    .then((track) => {
+      const categoryId = track.categoryId
+      return Category.findOne({
+        attributes: ['id', 'name', 'icon'],
+        where: { id: categoryId },
+        raw: true
+      })
+        .then((category) => {
+          track.categoryName = category.name
+          return track
+        })
+    })
+
     .then((track) => {
       if (!track) {
         req.flash('fail', '找不到資料')
@@ -97,14 +111,28 @@ router.get('/edit/:id', (req, res, next) => {
 
 router.put('/:id', (req, res, next) => {
   const id = req.params.id
-  const { name, date, amount } = req.body
+  const { name, date, amount, category } = req.body
   const userId = req.user.id
 
   return Track.findByPk(id, {
-    attributes: ['id', 'name', 'date', 'amount', 'userId'],
+    attributes: ['id', 'name', 'date', 'amount', 'userId', 'categoryId'],
     raw: true
   })
+  // 去category資料庫撈name 等於user 所選category 的id，再轉換存入track 的categoryId
     .then((track) => {
+      // const categoryId = track.categoryId
+      return Category.findOne({
+        attributes: ['id', 'name'],
+        where: { name: category },
+        raw: true
+      })
+        .then((category) => {
+          track.categoryId = category.id
+          return track
+        })
+    })
+    .then((track) => {
+      const categoryId = track.categoryId
       if (!track) {
         req.flash('fail', '找不到資料')
         return res.redirect('/tracks')
@@ -113,7 +141,7 @@ router.put('/:id', (req, res, next) => {
         req.flash('fail', '權限不足')
         return res.redirect('/tracks')
       }
-      return Track.update({ name, date, amount }, { where: { id } })
+      return Track.update({ name, date, amount, categoryId }, { where: { id } })
         .then(() => {
           req.flash('success', '更新成功！')
           return res.redirect('/tracks')
