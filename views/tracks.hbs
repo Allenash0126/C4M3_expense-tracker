@@ -1,16 +1,19 @@
 {{>message}}
 
 <div class="container">
-  <div>
-    <select name="category" id="category">
-      <option>類別</option>
-      <option>家居物業</option>
-      <option>交通出行</option>
-      <option>休閒娛樂</option>
-      <option>餐飲食品</option>
-      <option>其他</option>
-    </select>
-  </div>
+  <form action="/tracks" method="post" >
+    <div>
+      <select name="category" id="category">
+        <option>類別</option>
+        <option>家居物業</option>
+        <option>交通出行</option>
+        <option>休閒娛樂</option>
+        <option>餐飲食品</option>
+        <option>其他</option>
+      </select>
+    </div>
+    <button type="submit">Go!  (依類別篩選)</button>
+  </form>
 
   <div>
     <h6>總金額</h6>    

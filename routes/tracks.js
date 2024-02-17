@@ -12,6 +12,8 @@ router.get('/', (req, res, next) => {
     where: { userId },
     raw: true
   })
+
+  // for Category Icon，提取藏在tracks 裡的category name，找到category資料庫中的id，再提供icon
     .then((tracks) => {
       const promises = tracks.map((track) => {
         const categoryId = track.categoryId
@@ -27,6 +29,41 @@ router.get('/', (req, res, next) => {
       })
       // 用Promise.all解決非同步的錯誤：確保取得所有data，避免Category.findOne還沒完成，就下一步
       return Promise.all(promises)
+    })
+
+    .then((tracks) => {
+      // 計算總共花費totalAmount
+      let totalAmount = 0
+      for (i = 0; i < tracks.length; i++) {
+        totalAmount += tracks[i].amount
+      }
+      res.render('tracks', { tracks, totalAmount })
+    })
+    .catch((error) => {
+      error.errorMessage = '找不到資料'
+      next(error)
+    })
+})
+
+router.post('/', (req, res, next) => {
+  const userId = req.user.id
+  const { category } = req.body
+
+  return Track.findAll({
+    attributes: ['id', 'name', 'date', 'amount', 'userId', 'categoryId'],
+    where: { userId },
+    raw: true
+  })
+  
+  // for Category Icon，提取藏在tracks 裡的category name，找到category資料庫中的id，再提供icon
+    .then((tracks) => {
+      console.log('category is : ', category)
+      console.log('before: tracks', tracks)
+      const newTracks = tracks.filter((track) => {
+        return track.name.includes(category)
+      })
+      console.log('after: tracks', tracks)
+      console.log('newTracks: ', newTracks)
     })
 
     .then((tracks) => {
