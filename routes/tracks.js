@@ -45,38 +45,44 @@ router.get('/', (req, res, next) => {
     })
 })
 
+// 依類別 category 做篩選
 router.post('/', (req, res, next) => {
   const userId = req.user.id
   const { category } = req.body
 
-  return Track.findAll({
-    attributes: ['id', 'name', 'date', 'amount', 'userId', 'categoryId'],
-    where: { userId },
+  return Category.findAll({
+    attributes: ['id', 'name', 'icon'],
+    where: { name: category },
     raw: true
   })
-  
-  // for Category Icon，提取藏在tracks 裡的category name，找到category資料庫中的id，再提供icon
-    .then((tracks) => {
-      console.log('category is : ', category)
-      console.log('before: tracks', tracks)
-      const newTracks = tracks.filter((track) => {
-        return track.name.includes(category)
-      })
-      console.log('after: tracks', tracks)
-      console.log('newTracks: ', newTracks)
-    })
+    .then((categories) => {
+      if (!categories) {
+        return req.flash('fail', '請選擇分類後 再按一次Go')
+      } 
 
-    .then((tracks) => {
-      // 計算總共花費totalAmount
-      let totalAmount = 0
-      for (i = 0; i < tracks.length; i++) {
-        totalAmount += tracks[i].amount
-      }
-      res.render('tracks', { tracks, totalAmount })
-    })
-    .catch((error) => {
-      error.errorMessage = '找不到資料'
-      next(error)
+      const categoryId = categories[0].id
+      const categoryIcon = categories[0].icon
+      return Track.findAll({
+        attributes: ['id', 'name', 'date', 'amount', 'userId', 'categoryId'],
+        where: { userId, categoryId },
+        raw: true
+      })
+        .then((tracks) => {
+          // 計算總共花費totalAmount
+          let totalAmount = 0
+          for (i = 0; i < tracks.length; i++) {
+            totalAmount += tracks[i].amount
+          }
+          // 篩選後 依然要顯示icon
+          tracks.forEach((track) => {
+            track.categoryIcon = categoryIcon
+          })
+          res.render('tracks', { tracks, totalAmount })
+        })
+        .catch((error) => {
+          error.errorMessage = '找不到資料'
+          next(error)
+        })
     })
 })
 
