@@ -22,7 +22,7 @@ module.exports = {
         },
          {
           id: 3,
-          name: '大新',
+          name: '悟空',
           email: 'user3@example.com',
           password: 'user3',
           createdAt: new Date(),
