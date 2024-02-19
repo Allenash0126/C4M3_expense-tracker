@@ -3,10 +3,6 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    let transaction
-
-    try {
-      transaction = await queryInterface.sequelize.transaction()
       await queryInterface.bulkInsert('Users', [
         {
           id: 1,
@@ -32,53 +28,7 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date()
         }
-      ],
-      { transaction }
-      )
-
-      await queryInterface.bulkInsert('Categories', [
-        {
-          id: 1,
-          name: '家居物業',
-          icon: '<i class="fa-solid fa-house"></i>',
-          createdAt: new Date(),
-          updatedAt: new Date()
-        },
-        {
-          id: 2,
-          name: '交通出行',
-          icon: '<i class="fa-solid fa-van-shuttle"></i>',
-          createdAt: new Date(),
-          updatedAt: new Date()
-        },
-        {
-          id: 3,
-          name: '休閒娛樂',
-          icon: '<i class="fa-solid fa-face-grin-beam"></i>',
-          createdAt: new Date(),
-          updatedAt: new Date()
-        },
-        {
-          id: 4,
-          name: '餐飲食品',
-          icon: '<i class="fa-solid fa-utensils"></i>',
-          createdAt: new Date(),
-          updatedAt: new Date()
-        },
-        {
-          id: 5,
-          name: '其他',
-          icon: '<i class="fa-solid fa-pen"></i>',
-          createdAt: new Date(),
-          updatedAt: new Date()
-        }
       ])
-      await transaction.commit()
-    } catch (error) {
-      if (transaction) await transaction.rollback()
-    }
-
-    // 因為CASCADE, 所以必須先建立(Categories + Users) 才能建立(Tracks)
     await queryInterface.bulkInsert('Tracks', [
       {
         id: 1,
@@ -135,6 +85,5 @@ module.exports = {
 
   async down (queryInterface, Sequelize) {
     await queryInterface.bulkDelete('Users', null)
-    await queryInterface.bulkDelete('Categories', null)
   }
 }
