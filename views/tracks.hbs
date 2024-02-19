@@ -12,28 +12,35 @@
         <option>其他</option>
       </select>
     </div>
-    <button type="submit">Go!  (依類別篩選)</button>
+    <button type="submit">(依類別篩選)</button>
   </form>
 
-  <div>
-    <h6>總金額</h6>    
-    <h3>{{ totalAmount }}</h3>
+  <div >
+    <h6 style="display: inline;">總金額</h6>    
+    <h3 style="display: inline;">{{ totalAmount }}元</h3>
   </div>
 
-  <div>
+  <div >
     <ul>
       {{#each tracks}} 
-        <li>
+        <li class="d-flex justify-content-around">
           {{!-- 在hbs中：3個大括號 表示解析網頁，2個大括號 表示單純引入參數 --}}
-          {{{this.categoryIcon}}}:
-          {{this.name}}: 
-          {{this.amount}}:
-          {{this.date}}:
-          <a href="/tracks/edit/{{this.id}}">修改</a>
+          <div>
+            {{{this.categoryIcon}}}
+            {{this.name}}
+          </div>
 
-          <form action="/tracks/{{this.id}}?_method=DELETE" method="post" style="display: inline;">
-            <button type="submit">刪除</button>
-          </form>
+          <div class="">
+            {{this.date}}
+            <p style="display: inline;">{{this.amount}} 元</p>
+          </div>
+
+          <div>
+            <a href="/tracks/edit/{{this.id}}">修改</a>
+            <form action="/tracks/{{this.id}}?_method=DELETE" method="post" style="display: inline;">
+              <button type="submit">刪除</button>
+            </form>
+          </div>
 
         </li>
       {{/each}}
