@@ -58,7 +58,7 @@ router.post('/', (req, res, next) => {
     .then((categories) => {
       if (!categories) {
         return req.flash('fail', '請選擇分類後 再按一次Go')
-      } 
+      }
 
       const categoryId = categories[0].id
       const categoryIcon = categories[0].icon
