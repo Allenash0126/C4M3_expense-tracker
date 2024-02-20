@@ -49,6 +49,12 @@ router.get('/', (req, res, next) => {
 router.post('/', (req, res, next) => {
   const userId = req.user.id
   const { category } = req.body
+  
+  // 防止user未選擇欲篩選的類別 就點選button
+  if (category === '類別') {
+    req.flash('fail', '請選擇欲篩選的類別')
+    return res.redirect('/tracks')
+  }
 
   return Category.findAll({
     attributes: ['id', 'name', 'icon'],
@@ -57,9 +63,8 @@ router.post('/', (req, res, next) => {
   })
     .then((categories) => {
       if (!categories) {
-        return req.flash('fail', '請選擇分類後 再按一次Go')
+        return req.flash('fail', '找不到資料:(')
       }
-
       const categoryId = categories[0].id
       const categoryIcon = categories[0].icon
       return Track.findAll({
