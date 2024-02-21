@@ -56,6 +56,11 @@ router.post('/', (req, res, next) => {
     return res.redirect('/tracks')
   }
 
+  // 當user進入篩選頁面，可選取'全部類別'，回到初始畫面
+  if (category === '全部類別') {
+    return res.redirect('/tracks')
+  }
+
   return Category.findAll({
     attributes: ['id', 'name', 'icon'],
     where: { name: category },
